@@ -1,35 +1,41 @@
 (function () {
     'use strict';
 
-    var UNARY = module.exports.UNARY = 1;
-    var BINARY = module.exports.BINARY = 2;
-    var LITERAL = module.exports.LITERAL = 3;
-
-
-    module.exports.Literal = function (type, value) {
-        // TODO Test if literal value is in range
-        return {
-            kind: LITERAL,
-            type: type,
-            value: value
-        };
+    var Node = function () {
+        this.kind = 0;
+        this.type = null;
     };
 
-    module.exports.Unary = function (operator, value) {
-        return {
-            kind: UNARY,
-            operator: operator,
-            value: value
-        };
+    Node.UNARY   = 'UNARY'; //1;
+    Node.BINARY  = 'BINARY'; //2;
+    Node.LITERAL = 'LITERAL'; //3;
+
+    Node.literal = function (type, value) {
+        // TODO Test if literal value is in valid
+        // Numbers must be in range, strings with correct characters etc...
+        var res = new Node();
+        res.kind = Node.LITERAL;
+        res.type = type;
+        res.value = value;
+        return res;
     };
 
-    module.exports.Binary = function (operator, left, right) {
-        return {
-            kind: BINARY,
-            operator: operator,
-            left: left,
-            right: right
-        };
+    Node.unary = function (operator, operand) {
+        var res = new Node();
+        res.kind = Node.UNARY;
+        res.operator = operator;
+        res.operand = operand;
+        return res;
     };
 
+    Node.binary = function (operator, left, right) {
+        var res = new Node();
+        res.kind = Node.BINARY;
+        res.operator = operator;
+        res.left = left;
+        res.right = right;
+        return res;
+    };
+
+    module.exports = Node;
 })();

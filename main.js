@@ -13,36 +13,38 @@
     var demos = [];
 
     demos.push(
-    Node.Unary(
-        op.NOT,Node.Literal(Type.int8, 0))
+    Node.unary(
+        op.NOT,Node.literal(Type.int8, 0))
     );
 
     demos.push(
-    Node.Unary(op.NEG,
-        Node.Literal(Type.int8, 3))
+    Node.unary(op.NEG,
+        Node.literal(Type.int8, 3))
     );
 
     demos.push(
-    Node.Binary(op.SHL,
-        Node.Literal(Type.int8, 1),
-        Node.Literal(Type.int8, 2))
+    Node.binary(op.SHL,
+        Node.literal(Type.int8, 1),
+        Node.literal(Type.int8, 2))
     );
 
     demos.push(
-    Node.Binary(op.ADD,
-        Node.Unary(op.NEG,
-            Node.Literal(Type.int8, 5)),
-        Node.Literal(Type.int8, 4))
+    Node.binary(op.ADD,
+        Node.unary(op.NEG,
+            Node.literal(Type.int8, 5)),
+        Node.literal(Type.int8, 4))
     );
 
     demos.push(
-    Node.Binary(op.ADD,
-        Node.Literal(Type.int8, 4),
-        Node.Literal(Type.int8, 5))
+    Node.binary(op.ADD,
+        Node.literal(Type.int8, 4),
+        Node.literal(Type.int8, 5))
     );
 
     demos.forEach(function (demo) {
-        console.log(sem(demo));
+        console.log('----------------------');
+        sem(demo);
+        console.log(demo);
         console.log(run(demo));
     });
 })();

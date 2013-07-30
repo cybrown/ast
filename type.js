@@ -1,42 +1,43 @@
 (function () {
     'use strict';
 
-    // Private constants
-    var NONE     = 0;
-    var INT      = 1;
-    var BYTE     = 2;
-    var FLOAT    = 3;
-    var POINTER  = 4;
-    var TUPLE    = 5;
-    var FUNCTION = 6;
+
 
 
     var Type = function () {
-        this.type = NONE;
-        this.value = null;
+        this.type = Type.NONE;
     };
 
+        // Private constants
+    Type.NONE     = 'NONE'; //0;
+    Type.INT      = 'INT'; //1;
+    Type.BYTE     = 'BYTE'; //2;
+    Type.FLOAT    = 'FLOAT'; //3;
+    Type.POINTER  = 'POINTER'; //4;
+    Type.TUPLE    = 'TUPLE'; //5;
+    Type.FUNCTION = 'FUNCTION'; //6;
+
     Type.prototype.setInt = function (size) {
-        this.type = INT;
+        this.type = Type.INT;
         this.size = size;
 
         return this;
     };
 
     Type.prototype.setByte = function (size) {
-        this.type = BYTE;
+        this.type = Type.BYTE;
         this.size = size;
         return this;
     };
 
     Type.prototype.setFloat = function (size) {
-        this.type = FLOAT;
+        this.type = Type.FLOAT;
         this.size = size;
         return this;
     };
 
     Type.prototype.setPointer = function (type) {
-        this.type = POINTER;
+        this.type = Type.POINTER;
         this.value = type;
         return this;
     };
@@ -47,21 +48,21 @@
             return false;
         }
         switch (this.type) {
-            case NONE:
+            case Type.NONE:
                 throw new Exception('Type NONE');
                 break;
-            case INT:
-            case BYTE:
-            case FLOAT:
+            case Type.INT:
+            case Type.BYTE:
+            case Type.FLOAT:
                 return this.size == other.size;
                 break;
-            case POINTER:
+            case Type.POINTER:
                 return this.value.equals(other.value);
                 break;
-            case TUPLE:
+            case Type.TUPLE:
 
                 break;
-            case FUNCTION:
+            case Type.FUNCTION:
 
                 break;
         }
@@ -71,16 +72,16 @@
     // Return a string representation of the type
     Type.prototype.toString = function () {
         switch (this.type) {
-            case INT:
+            case Type.INT:
                 return 'INT' + this.size;
                 break;
-            case BYTE:
+            case Type.BYTE:
                 return 'BYTE' + this.size;
                 break;
-            case FLOAT:
+            case Type.FLOAT:
                 return 'FLOAT' + this.size;
                 break;
-            case POINTER:
+            case Type.POINTER:
                 return 'Pointer of ' + this.value.toString();
             default:
                 return 'Uknown type.';

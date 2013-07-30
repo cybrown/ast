@@ -10,7 +10,7 @@
     };
 
     var UnaryNode = function (node) {
-        var value = RunNode(node.value);
+        var value = RunNode(node.operand);
         switch (node.operator) {
             case op.POS:
                 return int.Pos(value);
