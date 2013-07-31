@@ -6,9 +6,11 @@
         this.type = null;
     };
 
-    Node.UNARY   = 'UNARY'; //1;
-    Node.BINARY  = 'BINARY'; //2;
-    Node.LITERAL = 'LITERAL'; //3;
+    Node.UNARY       = 'UNARY'; //1;
+    Node.BINARY      = 'BINARY'; //2;
+    Node.LITERAL     = 'LITERAL'; //3;
+    Node.DECLARATION = 'DECLARATION'; //4;
+    Node.ASSIGN      = 'ASSIGN'; //5;
 
     Node.literal = function (type, value) {
         // TODO Test if literal value is in valid
@@ -34,6 +36,31 @@
         res.operator = operator;
         res.left = left;
         res.right = right;
+        return res;
+    };
+
+    Node.invoke = function (func, args) {
+        var res = new Node();
+        res.kind = Node.INVOKE;
+        res.func = func;
+        res.args = args;
+        return res;
+    };
+
+    Node.declaration = function (type, name, value) {
+        var res = new Node();
+        res.kind = Node.DECLARATION;
+        res.type = type;
+        res.name = name;
+        res.value = value;
+        return res;
+    };
+
+    Node.assign = function (left, right) {
+        var res = new Node();
+        res.kind = Node.ASSIGN;
+        this.left = left;
+        this.right = right;
         return res;
     };
 

@@ -21,6 +21,8 @@
             case op.BNOT:
                 node.type = node.operand.type;
                 break;
+            default:
+                throw new Error('Semantic.UnaryNode: Uknown operator');
         }
     };
 
@@ -69,13 +71,20 @@
             case op.SHR:
                 node.type = node.left.type;
                 break;
+            default:
+                throw new Error('Semantic.UnaryNode: Uknown operator');
         }
+    };
+
+    var DeclarationNode = function () {
+
     };
 
     var RunNodeArray = {};
     RunNodeArray[Node.LITERAL] = LiteralNode;
     RunNodeArray[Node.UNARY]   = UnaryNode;
     RunNodeArray[Node.BINARY]  = BinaryNode;
+    RunNodeArray[Node.DECLARATION]  = DeclarationNode;
 
     var RunNode = function (node) {
         RunNodeArray[node.kind](node);

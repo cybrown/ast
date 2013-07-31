@@ -1,14 +1,12 @@
 (function () {
     'use strict';
 
+    var Type = require('./type');
     var Node  = require('./nodes');
     var op    = require('./operator');
 
-    var run = require('./interpretor');
-    var Type = require('./type');
-
     var sem = require('./semantic');
-
+    var run = require('./interpretor');
 
     var demos = [];
 
@@ -39,6 +37,12 @@
     Node.binary(op.ADD,
         Node.literal(Type.int8, 4),
         Node.literal(Type.int8, 5))
+    );
+
+    demos.push(
+    Node.declaration(Type.int8,
+        'foo',
+        Node.literal(Type.int8, 42))
     );
 
     demos.forEach(function (demo) {

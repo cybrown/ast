@@ -72,10 +72,15 @@
         }
     };
 
+    var DeclarationNode = function () {
+
+    };
+
     var RunNodeArray = {};
     RunNodeArray[nodes.LITERAL] = LiteralNode;
     RunNodeArray[nodes.UNARY]   = UnaryNode;
     RunNodeArray[nodes.BINARY]  = BinaryNode;
+    RunNodeArray[nodes.DECLARATION]  = DeclarationNode;
 
     var RunNode = function (node) {
         return RunNodeArray[node.kind](node);
