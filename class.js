@@ -1,47 +1,152 @@
 (function () {
     'use strict';
 
+    var Interface = require('./interface');
+
     var Class = function (name) {
         this.name = name;
-        this.super = null;
+        this.parent = null;
         this.fields = [];
         this.methods = [];
         this.interfaces = [];
     };
 
-    Class.prototype.setSuper = function (super) {
-        this.super = super;
+    Class.prototype.setParent = function (parent) {
+        if (parent === this) {
+            throw new Error('Class must not be it\'s own parent');
+        }
+        this.parent = parent;
     };
 
-    Class.prototype.addField = function (field) {
-        this.fields.push(field);
+    Class.prototype.addField = function (name, type) {
+        this.fields.push({
+            name: name,
+            type: type
+        });
+    };
+
+    Class.prototype.addInterface = function (_interface) {
+        this.interfaces.push(_interface);
     };
 
     Class.prototype.addMethod = function (method) {
         this.methods.push(method);
     };
 
-    Class.prototype.addInterface = function (interface) {
-        this.interfaces.push(interface);
-    };
-
-    Class.prototype.isChild = function (cls) {
-        cls2 = this.super;
-        while (cls2 != null) {
-            if (cls2 === cls) {
+    Class.prototype.isExtending = function (classOrInterface) {
+        var currentClass = this.parent;
+        while (currentClass != null) {
+            if (currentClass === classOrInterface) {
                 return true;
             }
-            cls2 = cls2.super;
+            currentClass = currentClass.parent;
         };
         return false;
     };
 
-    Class.prototype.hasInterface = function (interface) {
-
+    Class.prototype.isImplementing = function (_interface) {
+        if (!_interface instanceof Interface) {
+            throw new Error('Argument must be an interface');
+        }
+        for (var i = 0; i < this.interfaces.length; i++) {
+            if (this.interfaces[i].isImplementing(_interface)) {
+                return true;
+            }
+        }
+        if (this.parent) {
+            return this.parent.isImplementing(_interface);
+        }
+        return false;
     };
 
-    Class.prototype.hasMethod = function (method) {
+    Class.prototype.isA = function (classOrInterface) {
+        if (classOrInterface instanceof Class) {
+            return this.isExtending(classOrInterface);
+        } else if (classOrInterface instanceof Interface) {
+            return this.isImplementing(classOrInterface);
+        } else {
+            throw new Error('Must be a class or an interface');
+        }
+    };
 
+    Class.prototype.distanceTo = function (classOrInterface) {
+        if (classOrInterface instanceof Class) {
+            return this.distanceToClass(classOrInterface);
+        } else if (classOrInterface instanceof Interface) {
+            return this.distanceToInterface(classOrInterface);
+        } else {
+            throw new Error('Must be a class or an interface');
+        }
+    };
+
+    Class.prototype.distanceToClass = function (cls) {
+        if (this === cls) {
+            return 0;
+        } else if (this.parent) {
+            var tmp = this.parent.distanceToClass(cls);
+            if (tmp !== -1) {
+                return tmp + 1;
+            }
+        }
+        return -1;
+    };
+
+    Class.prototype.distanceToInterface = function (_interface) {
+        for (var i = 0; i < this.interfaces.length; i++) {
+            var tmp = this.interfaces[i].distanceTo(_interface);
+            if (tmp !== -1) {
+                return tmp + 1;
+            }
+        }
+        if (this.parent) {
+            tmp = this.parent.distanceToInterface(_interface);
+            if (tmp !== -1) {
+                return tmp + 1;
+            }
+        }
+        return -1;
+    };
+
+    Class.prototype.findMethodsByName = function (regex) {
+        var res = [];
+        this.methods.forEach(function (method) {
+            if (method.name.match(regex)) {
+                res.push(method);
+            }
+        });
+        this.interfaces.forEach(function (_interface) {
+            res = res.concat(_interface.findMethodsByName(regex));
+        });
+        return res;
+    };
+
+    Class.prototype.hasMethodDefined = function (method) {
+        for (var i = 0; i < this.methods.length; i++) {
+            if (this.methods[i] === method) {
+                return true;
+            }
+        }
+        if (this.parent) {
+            return this.parent.hasMethodDefined(method);
+        }
+        return false;
+    };
+
+    Class.prototype.hasMethodDeclared = function (method) {
+        for (var i = 0; i < this.methods.length; i++) {
+            if (this.methods[i] === method) {
+                return true;
+            }
+        }
+        for (var i = 0; i < this.interfaces.length; i++) {
+            if (this.interfaces[i].hasMethod(method)) {
+                return true;
+            }
+        }
+        if (this.parent) {
+            return this.parent.hasMethodDeclared(method);
+        }
+        return false;
     };
 
     module.exports = Class;

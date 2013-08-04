@@ -1,21 +1,35 @@
 (function () {
     'use strict';
 
-
-
-
-    var Type = function () {
-        this.type = Type.NONE;
+    var Type = function (type, size) {
+        if (typeof type === 'string') {
+            switch (type) {
+                case 'int':
+                    this.setInt(size);
+                    break;
+                case 'byte':
+                    this.setByte(size);
+                    break;
+                case 'float':
+                    this.setFloat(size);
+                    break;
+            }
+        } else if (type instanceof Type) {
+            this.setPointer(type);
+        } else {
+            this.type = Type.NONE;
+        }
     };
 
-        // Private constants
+    // Private constants
     Type.NONE     = 'NONE'; //0;
     Type.INT      = 'INT'; //1;
     Type.BYTE     = 'BYTE'; //2;
     Type.FLOAT    = 'FLOAT'; //3;
     Type.POINTER  = 'POINTER'; //4;
     Type.TUPLE    = 'TUPLE'; //5;
-    Type.FUNCTION = 'FUNCTION'; //6;
+    Type.INTERFACE    = 'INTERFACE'; //6;
+    Type.FUNCTION = 'FUNCTION'; //7;
 
     Type.prototype.setInt = function (size) {
         this.type = Type.INT;
@@ -39,6 +53,12 @@
     Type.prototype.setPointer = function (type) {
         this.type = Type.POINTER;
         this.value = type;
+        return this;
+    };
+
+    Type.prototype.setInterface = function (classOrInterface) {
+        this.type = Type.INTERFACE;
+        this.value = classOrInterface;
         return this;
     };
 
@@ -69,23 +89,27 @@
         return true;
     };
 
-    // Return a string representation of the type
-    Type.prototype.toString = function () {
-        switch (this.type) {
-            case Type.INT:
-                return 'INT' + this.size;
-                break;
-            case Type.BYTE:
-                return 'BYTE' + this.size;
-                break;
-            case Type.FLOAT:
-                return 'FLOAT' + this.size;
-                break;
-            case Type.POINTER:
-                return 'Pointer of ' + this.value.toString();
-            default:
-                return 'Uknown type.';
+    Type.prototype.isA = function (other) {
+        return this.equals(other);
+    };
+
+    Type.prototype.getPointedType = function () {
+        if (this.type === Type.POINTER) {
+            return this.value;
+        } else {
+            throw new Error('Not a pointer !');
         }
+    };
+
+    Type.prototype.distanceTo = function (other) {
+        if (this.type === Type.INT) {
+            if (this.equals(other)) {
+                return 0;
+            }
+        } else if (this.type === Type.INTERFACE && other.type === Type.INTERFACE) {
+            return this.value.distanceTo(other.value);
+        }
+        return -1;
     };
 
     // Predefined simple types

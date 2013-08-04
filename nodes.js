@@ -11,6 +11,8 @@
     Node.LITERAL     = 'LITERAL'; //3;
     Node.DECLARATION = 'DECLARATION'; //4;
     Node.ASSIGN      = 'ASSIGN'; //5;
+    Node.IF          = 'IF'; //6;
+    Node.FOR         = 'FOR'; //7;
 
     Node.literal = function (type, value) {
         // TODO Test if literal value is in valid
@@ -61,6 +63,23 @@
         res.kind = Node.ASSIGN;
         this.left = left;
         this.right = right;
+        return res;
+    };
+
+    Node.if = function (condition, onTrue, onFalse) {
+        var res = new Node();
+        res.kind = Node.IF;
+        res.condition = condition;
+        res.onTrue = onTrue;
+        res.onFalse = onFalse;
+        return res;
+    };
+
+    Node.for = function (condition, body) {
+        var res = new Node();
+        res.kind = Node.FOR;
+        res.condition = condition;
+        res.body = body;
         return res;
     };
 

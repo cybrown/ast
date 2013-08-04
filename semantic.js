@@ -76,15 +76,47 @@
         }
     };
 
-    var DeclarationNode = function () {
+    var DeclarationNode = function (node) {
+        // TODO if value, type must be compatible
+    };
 
+    var AssignNode = function (node) {
+        /*  TODO
+         *  Left and right values must be compatible
+         */
+        RunNode(node.left);
+        RunNode(node.right);
+        node.type = node.left.type;
+    };
+
+    var IfNode = function (node) {
+        /*  TODO
+         *  Condition must be boolean
+         *  onTrue and onFalse types must me compatible
+         */
+        RunNode(node.condition);
+        RunNode(node.onTrue);
+        RunNode(node.onFalse);
+        node.type = node.onTrue.type;
+    };
+
+    var ForNode = function (node) {
+        /*  TODO
+         *  Condition must be boolean
+         */
+        RunNode(node.condition);
+        RunNode(node.body);
+        node.type = node.body.type;
     };
 
     var RunNodeArray = {};
-    RunNodeArray[Node.LITERAL] = LiteralNode;
-    RunNodeArray[Node.UNARY]   = UnaryNode;
-    RunNodeArray[Node.BINARY]  = BinaryNode;
+    RunNodeArray[Node.LITERAL]      = LiteralNode;
+    RunNodeArray[Node.UNARY]        = UnaryNode;
+    RunNodeArray[Node.BINARY]       = BinaryNode;
     RunNodeArray[Node.DECLARATION]  = DeclarationNode;
+    RunNodeArray[Node.ASSIGN]       = AssignNode;
+    RunNodeArray[Node.IF]           = IfNode;
+    RunNodeArray[Node.FOR]          = ForNode;
 
     var RunNode = function (node) {
         RunNodeArray[node.kind](node);
