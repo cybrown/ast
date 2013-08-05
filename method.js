@@ -9,14 +9,6 @@
         this.hasOptionalArgs = false;
     };
 
-    Method.prototype.setName = function (name) {
-        this.name = name;
-    };
-
-    Method.prototype.setReturnType = function (type) {
-        this.returnType = type;
-    };
-
     Method.prototype.addArgument = function (type, name, optional) {
         if (optional !== true) optional = false;
         if (!optional && this.hasOptionalArgs == true) {
@@ -34,17 +26,10 @@
         }
     };
 
-    Method.prototype.isCompatible = function (arrayOfTypes) {
-        if (this.mandatoryArgsCount <= arrayOfTypes.length) {
-            for (var i = 0; i < arrayOfTypes.length; i++) {
-                if (!this.args[i].type.isA(arrayOfTypes[i])) {
-                    return false;
-                }
-            }
-            return true;
-        } else {
-            return false;
-        }
+    Method.prototype.getArgumentTypes = function () {
+        return this.args.map(function (arg) {
+            return arg.type;
+        });
     };
 
     Method.prototype.getDistances = function (arrayOfTypes) {
@@ -59,17 +44,36 @@
     };
 
     Method.prototype.getDistancesSum = function (arrayOfTypes) {
-        return this.getDistances(arrayOfTypes).reduce(function (a, b) {
-            return a + b;
-        });
-        var res = [];
-        if (arrayOfTypes.length < this.mandatoryArgsCount) {
-            throw new Error('Not enough parameters');
-        }
-        for (var i = 0; i < arrayOfTypes.length; i++) {
-            res.push(arrayOfTypes[i].distanceTo(this.args[i].type));
+        var res = 0;
+        var distances = this.getDistances(arrayOfTypes);
+        for (var i = 0; i < distances.length; i++) {
+            if (distances[i] === -1) {
+                return -1;
+            }
+            res += distances[i];
         }
         return res;
+    };
+
+    Method.prototype.isCompatible = function (arrayOfTypes) {
+        if (this.mandatoryArgsCount <= arrayOfTypes.length) {
+            for (var i = 0; i < arrayOfTypes.length; i++) {
+                if (!this.args[i].type.isA(arrayOfTypes[i])) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    };
+
+    Method.prototype.setName = function (name) {
+        this.name = name;
+    };
+
+    Method.prototype.setReturnType = function (type) {
+        this.returnType = type;
     };
 
     module.exports = Method;

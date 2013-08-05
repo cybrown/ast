@@ -1,51 +1,73 @@
 (function () {
     'use strict';
 
-    /**
-     * Represents an interface
-     * @class
-     * @param {string} name
-     */
     var Interface = function (name) {
         this.name = name;
         this.methods = [];
         this.interfaces = [];
     };
 
-    /**
-     * @param {Method} method
-     */
-    Interface.prototype.addMethod = function (method) {
-        this.methods.push(method);
-    };
-
     Interface.prototype.addInterface = function (_interface) {
         this.interfaces.push(_interface);
     };
+    
+    Interface.prototype.addMethod = function (method) {
+        var bestMethod = this.findBestMethod(method.name, method.getArgumentTypes(), true);
+        if (bestMethod !== null) {
+            var distance = bestMethod.getDistancesSum(method);
+            if (distance === 0) {
+                //throw new Error('Overriding a method own by this class.');
+            }
+        }
+        this.methods.push(method);
+    };
 
-    Interface.prototype.isImplementing = function (_interface) {
+    Interface.prototype.distanceTo = function (_interface) {
         if (this === _interface) {
-            return true;
+            return 0;
         } else {
+            var tmp;
             for (var i = 0; i < this.interfaces.length; i++) {
-                if (this.interfaces[i].isImplementing(_interface)) {
-                    return true;
+                tmp = this.interfaces[i].distanceTo(_interface);
+                if (tmp !== -1) {
+                    return tmp + 1;
                 }
             }
         }
-        return false;
+        return -1;
     };
 
-    Interface.prototype.findMethodsByName = function (regex) {
+    Interface.prototype.findBestMethod = function (regex, arrayOfTypes, onlyOwnMethods) {
+        var methods = this.findMethodsByName(regex, onlyOwnMethods);
+        var min = 1000;
+        var res = null;
+        var distance;
+        methods.forEach(function (method) {
+            distance = method.getDistancesSum(arrayOfTypes);
+            if (distance === min) {
+                return null;
+                //throw new Error('There is an ambiguity while choosing best method !');
+            }
+            if (distance < min && distance >= 0) {
+                min = distance;
+                res = method;
+            }
+        });
+        return res;
+    };
+
+    Interface.prototype.findMethodsByName = function (regex, onlyOwnMethods) {
         var res = [];
         this.methods.forEach(function (method) {
             if (method.name.match(regex)) {
                 res.push(method);
             }
         });
-        this.interfaces.forEach(function (_interface) {
-            res = res.concat(_interface.findMethodsByName(regex));
-        });
+        if (!onlyOwnMethods) {
+            this.interfaces.forEach(function (_interface) {
+                res = res.concat(_interface.findMethodsByName(regex));
+            });
+        }
         return res;
     };
 
@@ -62,19 +84,21 @@
         return false;
     };
 
-    Interface.prototype.distanceTo = function (_interface) {
+    Interface.prototype.isA = function (_interface) {
+        return this.isImplementing(_interface);
+    };
+
+    Interface.prototype.isImplementing = function (_interface) {
         if (this === _interface) {
-            return 0;
+            return true;
         } else {
-            var tmp;
             for (var i = 0; i < this.interfaces.length; i++) {
-                tmp = this.interfaces[i].distanceTo(_interface);
-                if (tmp !== -1) {
-                    return tmp + 1;
+                if (this.interfaces[i].isImplementing(_interface)) {
+                    return true;
                 }
             }
         }
-        return -1;
+        return false;
     };
 
     module.exports = Interface;

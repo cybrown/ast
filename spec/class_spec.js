@@ -14,6 +14,7 @@ describe('Interface', function () {
     var manager;
     var superManager;
     var personUtil;
+    var personUtil2;
 
     var util_employee_employee;
     var util_employee_manager;
@@ -52,6 +53,8 @@ describe('Interface', function () {
             personUtil.addMethod(util_employee_employee);
             personUtil.addMethod(util_employee_manager);
             personUtil.addMethod(util_manager_manager);
+        personUtil2 = new Class('PersonUtil2');
+            personUtil2.setParent(personUtil);
     });
 
     it('setParent', function () {
@@ -61,14 +64,14 @@ describe('Interface', function () {
         expect(function () {a.setParent(a); }).toThrow();
     })
 
-    it('hasMethodDeclared', function () {
-        expect(person.hasMethodDeclared(setAge)).toBe(true);
-        expect(person.hasMethodDeclared(noOneHasThisMethod)).toBe(false);
-        expect(employee.hasMethodDeclared(setAge)).toBe(true);
-        expect(employee.hasMethodDeclared(noOneHasThisMethod)).toBe(false);
-        expect(person.hasMethodDeclared(getId)).toBe(false);
-        expect(employee.hasMethodDeclared(getId)).toBe(true);
-        expect(manager.hasMethodDeclared(getId)).toBe(true);
+    it('hasMethod', function () {
+        expect(person.hasMethod(setAge)).toBe(true);
+        expect(person.hasMethod(noOneHasThisMethod)).toBe(false);
+        expect(employee.hasMethod(setAge)).toBe(true);
+        expect(employee.hasMethod(noOneHasThisMethod)).toBe(false);
+        expect(person.hasMethod(getId)).toBe(false);
+        expect(employee.hasMethod(getId)).toBe(true);
+        expect(manager.hasMethod(getId)).toBe(true);
     });
 
     it('hasMethodDefined', function () {
@@ -113,20 +116,10 @@ describe('Interface', function () {
         expect(superManager.distanceTo(hasId)).not.toBe(3);
     });
 
-    it('distanceToClass', function () {
-        expect(person.distanceToClass(person)).toBe(0);
-        expect(employee.distanceToClass(person)).toBe(1);
-        expect(person.distanceToClass(employee)).toBe(-1);
-        expect(manager.distanceToClass(person)).toBe(2);
-        expect(superManager.distanceToClass(person)).toBe(3);
-    });
-
-    it('distanceToInterface', function () {
-        expect(person.distanceToInterface(hasId)).toBe(-1);
-        expect(employee.distanceToInterface(hasId)).toBe(1);
-        expect(manager.distanceToInterface(hasId)).toBe(2);
-        expect(superManager.distanceToInterface(hasId)).toBe(1);
-        expect(superManager.distanceToInterface(hasId)).not.toBe(3);
+    it('findMethodsByName', function () {
+        expect(person.findMethodsByName('setAge')[0]).toBe(setAge);
+        expect(employee.findMethodsByName('setAge')[0]).toBe(setAge);
+        expect(manager.findMethodsByName('setAge')[0]).toBe(setAge);
     });
 
     it('getDistancesSum', function () {
@@ -140,6 +133,10 @@ describe('Interface', function () {
         expect(personUtil.findBestMethod('util', [manager, manager])).toBe(util_manager_manager);
         expect(personUtil.findBestMethod('util', [employee, manager])).toBe(util_employee_manager);
         expect(personUtil.findBestMethod('util', [employee, employee])).toBe(util_employee_employee);
+        expect(personUtil2.findBestMethod('util', [person, person])).toBe(null);
+        expect(personUtil2.findBestMethod('util', [manager, manager])).toBe(util_manager_manager);
+        expect(personUtil2.findBestMethod('util', [employee, manager])).toBe(util_employee_manager);
+        expect(personUtil2.findBestMethod('util', [employee, employee])).toBe(util_employee_employee);
     });
 
 });

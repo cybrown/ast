@@ -13,6 +13,14 @@ describe('Interface', function () {
     var newclonnable;
     var newnewclonnable;
     var noparent;
+    var dummy_c_c;
+    var dummy_nc_nc;
+    var dummy_nnc_nnc;
+    var dummy;
+    var dummy2;
+
+    var same;
+    var same2;
 
     beforeEach(function () {
         // Defining methods
@@ -32,6 +40,33 @@ describe('Interface', function () {
         newnewclonnable = new Interface('DummyClonnable');
             newnewclonnable.addInterface(newclonnable);
         noparent = new Interface('NoParent');
+
+        dummy_c_c = new Method('dummy');
+            dummy_c_c.addArgument(iclonable);
+            dummy_c_c.addArgument(iclonable);
+        dummy_nc_nc = new Method('dummy');
+            dummy_nc_nc.addArgument(newclonnable);
+            dummy_nc_nc.addArgument(newclonnable);
+        dummy_nnc_nnc = new Method('dummy');
+            dummy_nnc_nnc.addArgument(newnewclonnable);
+            dummy_nnc_nnc.addArgument(newnewclonnable);
+
+        dummy = new Interface('Dummy');
+            dummy.addMethod(dummy_nc_nc);
+            dummy.addMethod(dummy_nnc_nnc);
+        dummy2 = new Interface('Dummy2');
+            dummy2.addInterface(dummy);
+
+        same = new Method('same');
+            same.addArgument(Type.int8);
+        same2 = new Method('same');
+            same2.addArgument(Type.int8);
+    });
+
+    it('addMethod', function () {
+        iclonable.addMethod(same);
+        expect(function () {iclonable.addMethod(same2)}).toThrow();
+        expect(function () {newclonnable.addMethod(same2)}).not.toThrow();
     });
 
     it('isImplementing', function () {
@@ -72,5 +107,14 @@ describe('Interface', function () {
         expect(newclonnable.distanceTo(newclonnable)).toBe(0);
         expect(newclonnable.distanceTo(iclonable)).toBe(1);
         expect(newnewclonnable.distanceTo(iclonable)).toBe(2);
+    });
+
+    it('findBestMethod', function () {
+        expect(dummy.findBestMethod('dummy', [iclonable, iclonable])).toBe(null);
+        expect(dummy.findBestMethod('dummy', [newclonnable, newclonnable])).toBe(dummy_nc_nc);
+        expect(dummy.findBestMethod('dummy', [newnewclonnable, newnewclonnable])).toBe(dummy_nnc_nnc);
+        expect(dummy2.findBestMethod('dummy', [iclonable, iclonable])).toBe(null);
+        expect(dummy2.findBestMethod('dummy', [newclonnable, newclonnable])).toBe(dummy_nc_nc);
+        expect(dummy2.findBestMethod('dummy', [newnewclonnable, newnewclonnable])).toBe(dummy_nnc_nnc);
     });
 });
