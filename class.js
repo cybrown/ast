@@ -61,6 +61,7 @@
 
     Class.prototype.isA = function (classOrInterface) {
         if (classOrInterface instanceof Class) {
+            if (classOrInterface === this) return true;
             return this.isExtending(classOrInterface);
         } else if (classOrInterface instanceof Interface) {
             return this.isImplementing(classOrInterface);
@@ -147,6 +148,24 @@
             return this.parent.hasMethodDeclared(method);
         }
         return false;
+    };
+
+    Class.prototype.findBestMethod = function (regex, arrayOfTypes) {
+        var methods = this.findMethodsByName(regex);
+        var min = 1000;
+        var res = null;
+        var distance;
+        this.methods.forEach(function (method) {
+            distance = method.getDistancesSum(arrayOfTypes);
+            if (distance === min) {
+                throw new Error('There is an ambiguity while choosing best method !');
+            }
+            if (distance < min && distance >= 0) {
+                min = distance;
+                res = method;
+            }
+        });
+        return res;
     };
 
     module.exports = Class;

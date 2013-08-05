@@ -64,19 +64,15 @@ describe('Method', function () {
         expect(addi8.isCompatible([Type.int8, Type.int8])).toBe(true);
         expect(addi8.isCompatible([Type.int16, Type.int8])).toBe(false);
         expect(addi8.isCompatible([Type.int8, Type.int16])).toBe(false);
+        expect(addta.isCompatible([ta, ta])).toBe(true);
+        expect(addta.isCompatible([tb, ta])).toBe(true);
     });
 
     it('addArgument (with optional parameters)', function () {
         var m = new Method('test');
-        expect(function () {
-            m.addArgument('test1', Type.int8, false);
-        }).not.toThrow();
-        expect(function () {
-            m.addArgument('test1', Type.int8, true);
-        }).not.toThrow();
-        expect(function () {
-            m.addArgument('test1', Type.int8, false);
-        }).toThrow();
+        expect(function () {m.addArgument('test1', Type.int8, false); }).not.toThrow();
+        expect(function () {m.addArgument('test1', Type.int8, true); }).not.toThrow();
+        expect(function () {m.addArgument('test1', Type.int8, false); }).toThrow();
     });
 
     it('isCompatible (with optional parameters)', function () {
@@ -93,5 +89,14 @@ describe('Method', function () {
         expect(addta.getDistances([tb, tc])).toEqual([1, 2]);
         expect(function () {addtbtc.getDistances([]); }).toThrow();
         expect(addtbtc.getDistances([tc, tc])).toEqual([1, 0]);
+    });
+
+    it('getDistancesSum', function () {
+        expect(addi8.getDistancesSum([Type.int8, Type.int8])).toEqual(0);
+        expect(addta.getDistancesSum([ta, ta])).toEqual(0);
+        expect(addta.getDistancesSum([tb, ta])).toEqual(1);
+        expect(addta.getDistancesSum([tb, tc])).toEqual(3);
+        expect(function () {addtbtc.getDistancesSum([]); }).toThrow();
+        expect(addtbtc.getDistancesSum([tc, tc])).toEqual(1);
     });
 });

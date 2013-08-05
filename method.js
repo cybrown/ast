@@ -58,5 +58,19 @@
         return res;
     };
 
+    Method.prototype.getDistancesSum = function (arrayOfTypes) {
+        return this.getDistances(arrayOfTypes).reduce(function (a, b) {
+            return a + b;
+        });
+        var res = [];
+        if (arrayOfTypes.length < this.mandatoryArgsCount) {
+            throw new Error('Not enough parameters');
+        }
+        for (var i = 0; i < arrayOfTypes.length; i++) {
+            res.push(arrayOfTypes[i].distanceTo(this.args[i].type));
+        }
+        return res;
+    };
+
     module.exports = Method;
 })();

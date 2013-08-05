@@ -13,6 +13,11 @@ describe('Interface', function () {
     var getId;
     var manager;
     var superManager;
+    var personUtil;
+
+    var util_employee_employee;
+    var util_employee_manager;
+    var util_manager_manager;
 
     beforeEach(function () {
         // Defining methods
@@ -34,17 +39,26 @@ describe('Interface', function () {
         superManager = new Class('SuperManager');
             superManager.setParent(manager);
             superManager.addInterface(hasId);
+        util_employee_employee = new Method('util');
+            util_employee_employee.addArgument(employee);
+            util_employee_employee.addArgument(employee);
+        util_employee_manager = new Method('util');
+            util_employee_manager.addArgument(employee);
+            util_employee_manager.addArgument(manager);
+        util_manager_manager = new Method('util');
+            util_manager_manager.addArgument(manager);
+            util_manager_manager.addArgument(manager);
+        personUtil = new Class('PersonUtil');
+            personUtil.addMethod(util_employee_employee);
+            personUtil.addMethod(util_employee_manager);
+            personUtil.addMethod(util_manager_manager);
     });
 
     it('setParent', function () {
         var a = new Class('A');
         var b = new Class('B');
-        expect(function () {
-            b.setParent(a);
-        }).not.toThrow();
-        expect(function () {
-            a.setParent(a);
-        }).toThrow();
+        expect(function () {b.setParent(a); }).not.toThrow();
+        expect(function () {a.setParent(a); }).toThrow();
     })
 
     it('hasMethodDeclared', function () {
@@ -65,6 +79,7 @@ describe('Interface', function () {
     });
 
     it('isExtending', function () {
+        expect(person.isExtending(person)).toBe(false);
         expect(employee.isExtending(person)).toBe(true);
         expect(manager.isExtending(employee)).toBe(true);
         expect(manager.isExtending(person)).toBe(true);
@@ -77,6 +92,7 @@ describe('Interface', function () {
 
     it ('isA', function () {
         expect(person.isA(hasId)).toBe(false);
+        expect(person.isA(person)).toBe(true);
         expect(employee.isA(person)).toBe(true);
         expect(employee.isA(hasId)).toBe(true);
         expect(manager.isA(employee)).toBe(true);
@@ -111,6 +127,18 @@ describe('Interface', function () {
         expect(manager.distanceToInterface(hasId)).toBe(2);
         expect(superManager.distanceToInterface(hasId)).toBe(1);
         expect(superManager.distanceToInterface(hasId)).not.toBe(3);
+    });
+
+    it('getDistancesSum', function () {
+        var methods = personUtil.findMethodsByName('util');
+        expect(methods[0].getDistancesSum([manager, manager])).toBe(2);
+        expect(methods[2].getDistancesSum([manager, manager])).toBe(0);
+    });
+
+    it('findBestMethod', function () {
+        expect(personUtil.findBestMethod('util', [manager, manager])).toBe(util_manager_manager);
+        expect(personUtil.findBestMethod('util', [employee, manager])).toBe(util_employee_manager);
+        expect(personUtil.findBestMethod('util', [employee, employee])).toBe(util_employee_employee);
     });
 
 });
