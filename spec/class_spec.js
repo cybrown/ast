@@ -136,6 +136,7 @@ describe('Interface', function () {
     });
 
     it('findBestMethod', function () {
+        expect(personUtil.findBestMethod('util', [person, person])).toBe(null);
         expect(personUtil.findBestMethod('util', [manager, manager])).toBe(util_manager_manager);
         expect(personUtil.findBestMethod('util', [employee, manager])).toBe(util_employee_manager);
         expect(personUtil.findBestMethod('util', [employee, employee])).toBe(util_employee_employee);
