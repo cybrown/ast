@@ -1,7 +1,7 @@
 describe('Primitive Types', function () {
     'use strict';
-    var Type = require('../../type');
-    var Class = require('../../class');
+    var Type = require('../../Type');
+    var Class = require('../../Class');
 
     var int8, int8_2, int16, int32, int64;
     var byte8, byte8_2, byte16, byte32, byte64;

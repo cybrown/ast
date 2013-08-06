@@ -44,11 +44,10 @@
     };
 
     Interface.prototype.findAllMethods = function () {
-/*        console.log(this.name);
         return this.interfaces.reduce(function (methods, _interface) {
             methods.push.apply(methods, _interface.findAllMethods());
             return methods;
-        }, this.methods.slice(0));*/
+        }, this.methods.slice(0));
     };
 
     Interface.prototype.findBestMethod = function (regex, arrayOfTypes, onlyOwnMethods) {

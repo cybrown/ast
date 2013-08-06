@@ -1,8 +1,8 @@
 describe('Interface', function () {
     'use strict';
-    var Type = require('../type');
-    var Interface = require('../interface');
-    var Method = require('../method');
+    var Type = require('../Type');
+    var Interface = require('../Interface');
+    var Method = require('../Method');
 
     var close;
     var clone;
@@ -109,9 +109,9 @@ describe('Interface', function () {
             c.addMethod(clone2);
             c.addInterface(b);
         var ma = a.findAllMethods();
-//        var mb = b.findAllMethods();
-//        var mc = c.findAllMethods();
-/*        expect(ma.length).toBe(1);
+        var mb = b.findAllMethods();
+        var mc = c.findAllMethods();
+        expect(ma.length).toBe(1);
         expect(ma.indexOf(close)).not.toBe(-1);
         expect(mb.length).toBe(2);
         expect(mb.indexOf(close)).not.toBe(-1);
@@ -119,7 +119,7 @@ describe('Interface', function () {
         expect(mc.length).toBe(3);
         expect(mc.indexOf(close)).not.toBe(-1);
         expect(mc.indexOf(clone)).not.toBe(-1);
-        expect(mc.indexOf(clone2)).not.toBe(-1);*/
+        expect(mc.indexOf(clone2)).not.toBe(-1);
     });
 
     it('findMethodsByName (with regex)', function () {

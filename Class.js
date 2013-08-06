@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var Interface = require('./interface');
+    var Interface = require('./Interface');
 
     var Class = function (name) {
         Interface.call(this, name);
@@ -52,18 +52,26 @@
     };
 
     // Override Interface
-    Interface.prototype.findAllMethods = function () {
+    Class.prototype.findAllMethods = function () {
         var res = [];
-/*        if (this.parent) {
+        if (this.parent) {
             res = this.parent.findAllMethods();
-        }*/
-        return Interface.prototype.findAllMethods.call(this);
-        return res.push.apply(res, Interface.prototype.findAllMethods.call(this));
+        }
+        res.push.apply(res, Interface.prototype.findAllMethods.call(this));
+        return res;
     };
 
     // Override Interface
     Class.prototype.findBestMethod = function (regex, arrayOfTypes) {
         return Interface.prototype.findBestMethod.call(this, regex, arrayOfTypes);
+    };
+
+    Class.prototype.findImplementedMethods = function () {
+        var res = this.methods.slice(0);
+        if (this.parent) {
+            res.push.apply(res, this.parent.findImplementedMethods());
+        }
+        return res;
     };
 
     // Override Interface

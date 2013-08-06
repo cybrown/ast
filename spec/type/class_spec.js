@@ -1,7 +1,7 @@
 describe('Class Types', function () {
     'use strict';
-    var Type = require('../../type');
-    var Class = require('../../class');
+    var Type = require('../../Type');
+    var Class = require('../../Class');
 
     var a, b, c;
     var ta, tb, tc;

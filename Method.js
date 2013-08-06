@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    var Type = require('./type');
+    var Type = require('./Type');
 
     var Method = function (name, returnType) {
         this.args = [];
@@ -74,6 +74,28 @@
         } else {
             return false;
         }
+    };
+
+    Method.prototype.sameArguments = function (other) {
+        if (this.args.length !== other.args.length) {
+            return false;
+        }
+        for (var i = 0; i < this.args.length; i++) {
+            if (!this.args[i].type.equals(other.args[i].type)) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    Method.prototype.sameSignature = function (other) {
+        if (!this.sameArguments(other)) {
+            return false;
+        }
+        if (this.name !== other.name) {
+            return false;
+        }
+        return true;
     };
 
     Method.prototype.setName = function (name) {

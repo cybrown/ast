@@ -1,6 +1,6 @@
 describe('Primitive Types', function () {
     'use strict';
-    var Type = require('../../type');
+    var Type = require('../../Type');
 
     var pointer1, pointer2, pointer3, ppointer1;
 

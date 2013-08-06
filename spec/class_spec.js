@@ -1,9 +1,9 @@
 describe('Class', function () {
     'use strict';
-    var Type = require('../type');
-    var Interface = require('../interface');
-    var Class = require('../class');
-    var Method = require('../method');
+    var Type = require('../Type');
+    var Interface = require('../Interface');
+    var Class = require('../Class');
+    var Method = require('../Method');
 
     var setAge;
     var noOneHasThisMethod;
@@ -58,10 +58,6 @@ describe('Class', function () {
     });
 
     it('findImplementedMethods TODO', function () {
-        expect('Test case').toBe('created');
-    });
-
-    it('findAllMethods', function () {
         var ma = new Method('ma');
         var mb = new Method('mb');
         var mc = new Method('mv');
@@ -73,18 +69,46 @@ describe('Class', function () {
         var c = new Class('C');
             c.addMethod(mc);
             c.setParent(b);
-        var ma = a.findAllMethods();
-        var mb = b.findAllMethods();
-        var mc = c.findAllMethods();
-        expect(ma.length).toBe(1);
-        expect(ma.indexOf(ma)).not.toBe(-1);
-        expect(mb.length).toBe(2);
-        expect(mb.indexOf(ma)).not.toBe(-1);
-        expect(mb.indexOf(mb)).not.toBe(-1);
-        expect(mc.length).toBe(3);
-        expect(mc.indexOf(ma)).not.toBe(-1);
-        expect(mc.indexOf(mb)).not.toBe(-1);
-        expect(mc.indexOf(mc)).not.toBe(-1);
+        var mma = a.findImplementedMethods();
+        var mmb = b.findImplementedMethods();
+        var mmc = c.findImplementedMethods();
+        expect(mma.length).toBe(1);
+        expect(mma.indexOf(ma)).not.toBe(-1);
+        expect(mmb.length).toBe(2);
+        expect(mmb.indexOf(ma)).not.toBe(-1);
+        expect(mmb.indexOf(mb)).not.toBe(-1);
+        expect(mmc.length).toBe(3);
+        expect(mmc.indexOf(ma)).not.toBe(-1);
+        expect(mmc.indexOf(mb)).not.toBe(-1);
+        expect(mmc.indexOf(mc)).not.toBe(-1);
+    });
+
+    it('findAllMethods', function () {
+        var ma = new Method('ma');
+        var mb = new Method('mb');
+        var mc = new Method('mv');
+        var a = new Class('A');
+            a.addMethod(ma);
+        var b = new Class('B');
+            b.addMethod(mb);
+            b.setParent(a);
+            b.addInterface(hasId);
+        var c = new Class('C');
+            c.addMethod(mc);
+            c.setParent(b);
+        var mma = a.findAllMethods();
+        var mmb = b.findAllMethods();
+        var mmc = c.findAllMethods();
+        expect(mma.length).toBe(1);
+        expect(mma.indexOf(ma)).not.toBe(-1);
+        expect(mmb.length).toBe(3);
+        expect(mmb.indexOf(ma)).not.toBe(-1);
+        expect(mmb.indexOf(mb)).not.toBe(-1);
+        expect(mmb.indexOf(getId)).not.toBe(-1);
+        expect(mmc.length).toBe(4);
+        expect(mmc.indexOf(ma)).not.toBe(-1);
+        expect(mmc.indexOf(mb)).not.toBe(-1);
+        expect(mmc.indexOf(mc)).not.toBe(-1);
     });
 
     it('setParent', function () {

@@ -1,8 +1,8 @@
 describe('Method', function () {
     'use strict';
-    var Type = require('../type');
-    var Method = require('../method');
-    var Class = require('../class');
+    var Type = require('../Type');
+    var Method = require('../Method');
+    var Class = require('../Class');
 
     var close, clone, addi8, addi16, addi8opt, addta, addtbtc;
     var a, b, c;
@@ -51,6 +51,44 @@ describe('Method', function () {
         expect(close.returnType.equals(Type.int8)).toBe(true);
         expect(clone.returnType.equals(Type.int8)).toBe(false);
         expect(clone.returnType.equals(Type.int16)).toBe(true);
+    });
+
+    it('sameArguments', function () {
+        var a = new Method('add');
+            a.addArgument(Type.int8);
+            a.addArgument(Type.int8);
+        var b = new Method('add');
+            b.addArgument(Type.int8);
+            b.addArgument(Type.int16);
+        var c = new Method('add');
+            c.addArgument(Type.int8);
+            c.addArgument(Type.int8);
+        var d = new Method('sub');
+            d.addArgument(Type.int8);
+            d.addArgument(Type.int8);
+        expect(a.sameArguments(a)).toBe(true);
+        expect(a.sameArguments(b)).toBe(false);
+        expect(a.sameArguments(c)).toBe(true);
+        expect(a.sameArguments(d)).toBe(true);
+    });
+
+    it('sameSignature', function () {
+        var a = new Method('add');
+            a.addArgument(Type.int8);
+            a.addArgument(Type.int8);
+        var b = new Method('add');
+            b.addArgument(Type.int8);
+            b.addArgument(Type.int16);
+        var c = new Method('add');
+            c.addArgument(Type.int8);
+            c.addArgument(Type.int8);
+        var d = new Method('sub');
+            d.addArgument(Type.int8);
+            d.addArgument(Type.int8);
+        expect(a.sameSignature(a)).toBe(true);
+        expect(a.sameSignature(b)).toBe(false);
+        expect(a.sameSignature(c)).toBe(true);
+        expect(a.sameSignature(d)).toBe(false);
     });
 
     it('Arguments', function () {
