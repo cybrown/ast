@@ -1,6 +1,8 @@
 (function () {
     'use strict';
 
+    var Type = require('./type');
+
     var Method = function (name, returnType) {
         this.args = [];
         this.setName(name);
@@ -34,10 +36,16 @@
 
     Method.prototype.getDistances = function (arrayOfTypes) {
         var res = [];
+        if (!Array.isArray(arrayOfTypes)) {
+            throw new Error('arrayOfTypes must be an array');
+        }
         if (arrayOfTypes.length < this.mandatoryArgsCount) {
             throw new Error('Not enough parameters');
         }
         for (var i = 0; i < arrayOfTypes.length; i++) {
+            if (!arrayOfTypes[i] instanceof Type) {
+                throw new Error('arrayOfTypes must be an array of Type');
+            }
             res.push(arrayOfTypes[i].distanceTo(this.args[i].type));
         }
         return res;

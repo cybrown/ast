@@ -69,6 +69,12 @@ describe('Interface', function () {
         expect(function () {newclonnable.addMethod(same2)}).not.toThrow();
     });
 
+    it('addInterface', function () {
+        expect(function(){newclonnable.addInterface(newclonnable);}).toThrow();
+        expect(function(){newclonnable.addInterface(iclonable);}).toThrow();
+        expect(function(){iclonable.addInterface(newclonnable);}).toThrow();
+    });
+
     it('isImplementing', function () {
         expect(newclonnable.isImplementing(iclonable)).toBe(true);
         expect(newnewclonnable.isImplementing(newclonnable)).toBe(true);
@@ -91,6 +97,29 @@ describe('Interface', function () {
         var b = dispoableclonable.findMethodsByName('close');
         expect(b.length).toBe(1);
         expect(b.indexOf(close)).not.toBe(-1);
+    });
+
+    it('findAllMethods', function () {
+        var a = new Interface('A');
+            a.addMethod(close);
+        var b = new Interface('B');
+            b.addMethod(clone);
+            b.addInterface(a);
+        var c = new Interface('C');
+            c.addMethod(clone2);
+            c.addInterface(b);
+        var ma = a.findAllMethods();
+//        var mb = b.findAllMethods();
+//        var mc = c.findAllMethods();
+/*        expect(ma.length).toBe(1);
+        expect(ma.indexOf(close)).not.toBe(-1);
+        expect(mb.length).toBe(2);
+        expect(mb.indexOf(close)).not.toBe(-1);
+        expect(mb.indexOf(clone)).not.toBe(-1);
+        expect(mc.length).toBe(3);
+        expect(mc.indexOf(close)).not.toBe(-1);
+        expect(mc.indexOf(clone)).not.toBe(-1);
+        expect(mc.indexOf(clone2)).not.toBe(-1);*/
     });
 
     it('findMethodsByName (with regex)', function () {

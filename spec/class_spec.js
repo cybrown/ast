@@ -1,4 +1,4 @@
-describe('Interface', function () {
+describe('Class', function () {
     'use strict';
     var Type = require('../type');
     var Interface = require('../interface');
@@ -57,11 +57,44 @@ describe('Interface', function () {
             personUtil2.setParent(personUtil);
     });
 
+    it('findImplementedMethods TODO', function () {
+        expect('Test case').toBe('created');
+    });
+
+    it('findAllMethods', function () {
+        var ma = new Method('ma');
+        var mb = new Method('mb');
+        var mc = new Method('mv');
+        var a = new Class('A');
+            a.addMethod(ma);
+        var b = new Class('B');
+            b.addMethod(mb);
+            b.setParent(a);
+        var c = new Class('C');
+            c.addMethod(mc);
+            c.setParent(b);
+        var ma = a.findAllMethods();
+        var mb = b.findAllMethods();
+        var mc = c.findAllMethods();
+        expect(ma.length).toBe(1);
+        expect(ma.indexOf(ma)).not.toBe(-1);
+        expect(mb.length).toBe(2);
+        expect(mb.indexOf(ma)).not.toBe(-1);
+        expect(mb.indexOf(mb)).not.toBe(-1);
+        expect(mc.length).toBe(3);
+        expect(mc.indexOf(ma)).not.toBe(-1);
+        expect(mc.indexOf(mb)).not.toBe(-1);
+        expect(mc.indexOf(mc)).not.toBe(-1);
+    });
+
     it('setParent', function () {
         var a = new Class('A');
         var b = new Class('B');
+        var c = new Class('C');
         expect(function () {b.setParent(a); }).not.toThrow();
+        expect(function () {c.setParent(b); }).not.toThrow();
         expect(function () {a.setParent(a); }).toThrow();
+        expect(function () {a.setParent(c); }).toThrow();
     })
 
     it('hasMethod', function () {
