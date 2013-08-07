@@ -14,6 +14,9 @@
         this.type = type;
     };
 
+    Value.prototype.isValid = function () {
+        return true;
+    };
 
     module.exports = Value;
 })();
