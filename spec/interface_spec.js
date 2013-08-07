@@ -64,7 +64,7 @@ describe('Interface', function () {
     });
 
     it('addMethod', function () {
-        iclonable.addMethod(same);
+        expect(function () {iclonable.addMethod(same)}).not.toThrow();
         expect(function () {iclonable.addMethod(same2)}).toThrow();
         expect(function () {newclonnable.addMethod(same2)}).not.toThrow();
     });
