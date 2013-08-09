@@ -13,33 +13,26 @@ BinMultiplicative
   / primary
 
 primary
-  = ConstInteger
-  / ConstLong
-  / ConstFloat
-  / ConstDouble
+  = Number
+
+Number
+  = ConstFloat32
+  / ConstFloat64
+  / ConstInt64
+  / ConstInt32
   / "(" _ expression:expression _ ")" { console.log("expression"); }
 
-ConstInteger
-  = ConstDecimalInteger
-
-ConstLong
-  = ConstDecimalLong
-
-ConstDouble
-  = digits:(Digit+ "." Digit*) [dD]? { console.log("ConstDouble:" + digits); }
+ConstFloat64
+  = digits:([0-9]+ "." [0-9]*) [dD]? { console.log("ConstFloat64:" + digits); }
   
-ConstDecimalInteger
-  = digits:Digit+ { console.log("ConstDecimalInteger:" + digits); }
+ConstInt32
+  = digits:[0-9]+ { console.log("ConstInt32:" + digits); }
 
-ConstDecimalLong
-  = digits:Digit+ [lL] { console.log("ConstDecimalLong:" + digits); }
+ConstInt64
+  = digits:[0-9]+ [lL] { console.log("ConstInt64:" + digits); }
 
-ConstFloat
-  = digits:Digit+ "." Digit* [fF] { console.log("ConstFloat:" + digits); }
-
-
-Digit
-  = [0-9]
+ConstFloat32
+  = digits:([0-9]+ "." [0-9]*) [fF] { console.log("ConstFloat32:" + digits); }
 
 _
   = [\t\r\n]*

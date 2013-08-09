@@ -44,7 +44,6 @@ module.exports = (function(){
         "ConstDecimalInteger": parse_ConstDecimalInteger,
         "ConstDecimalLong": parse_ConstDecimalLong,
         "ConstFloat": parse_ConstFloat,
-        "Digit": parse_Digit,
         "_": parse__
       };
       
@@ -219,13 +218,13 @@ module.exports = (function(){
         var result0, result1, result2, result3, result4;
         var pos0, pos1;
         
-        result0 = parse_ConstDecimalInteger();
+        result0 = parse_ConstFloat();
         if (result0 === null) {
-          result0 = parse_ConstDecimalLong();
+          result0 = parse_ConstDouble();
           if (result0 === null) {
-            result0 = parse_ConstFloat();
+            result0 = parse_ConstDecimalLong();
             if (result0 === null) {
-              result0 = parse_ConstDouble();
+              result0 = parse_ConstDecimalInteger();
               if (result0 === null) {
                 pos0 = pos;
                 pos1 = pos;
@@ -296,12 +295,28 @@ module.exports = (function(){
         pos0 = pos;
         pos1 = pos;
         pos2 = pos;
-        result1 = parse_Digit();
+        if (/^[0-9]/.test(input.charAt(pos))) {
+          result1 = input.charAt(pos);
+          pos++;
+        } else {
+          result1 = null;
+          if (reportFailures === 0) {
+            matchFailed("[0-9]");
+          }
+        }
         if (result1 !== null) {
           result0 = [];
           while (result1 !== null) {
             result0.push(result1);
-            result1 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result1 = input.charAt(pos);
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
           }
         } else {
           result0 = null;
@@ -318,10 +333,26 @@ module.exports = (function(){
           }
           if (result1 !== null) {
             result2 = [];
-            result3 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result3 = input.charAt(pos);
+              pos++;
+            } else {
+              result3 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
             while (result3 !== null) {
               result2.push(result3);
-              result3 = parse_Digit();
+              if (/^[0-9]/.test(input.charAt(pos))) {
+                result3 = input.charAt(pos);
+                pos++;
+              } else {
+                result3 = null;
+                if (reportFailures === 0) {
+                  matchFailed("[0-9]");
+                }
+              }
             }
             if (result2 !== null) {
               result0 = [result0, result1, result2];
@@ -372,12 +403,28 @@ module.exports = (function(){
         var pos0;
         
         pos0 = pos;
-        result1 = parse_Digit();
+        if (/^[0-9]/.test(input.charAt(pos))) {
+          result1 = input.charAt(pos);
+          pos++;
+        } else {
+          result1 = null;
+          if (reportFailures === 0) {
+            matchFailed("[0-9]");
+          }
+        }
         if (result1 !== null) {
           result0 = [];
           while (result1 !== null) {
             result0.push(result1);
-            result1 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result1 = input.charAt(pos);
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
           }
         } else {
           result0 = null;
@@ -397,12 +444,28 @@ module.exports = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result1 = parse_Digit();
+        if (/^[0-9]/.test(input.charAt(pos))) {
+          result1 = input.charAt(pos);
+          pos++;
+        } else {
+          result1 = null;
+          if (reportFailures === 0) {
+            matchFailed("[0-9]");
+          }
+        }
         if (result1 !== null) {
           result0 = [];
           while (result1 !== null) {
             result0.push(result1);
-            result1 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result1 = input.charAt(pos);
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
           }
         } else {
           result0 = null;
@@ -442,12 +505,28 @@ module.exports = (function(){
         
         pos0 = pos;
         pos1 = pos;
-        result1 = parse_Digit();
+        if (/^[0-9]/.test(input.charAt(pos))) {
+          result1 = input.charAt(pos);
+          pos++;
+        } else {
+          result1 = null;
+          if (reportFailures === 0) {
+            matchFailed("[0-9]");
+          }
+        }
         if (result1 !== null) {
           result0 = [];
           while (result1 !== null) {
             result0.push(result1);
-            result1 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result1 = input.charAt(pos);
+              pos++;
+            } else {
+              result1 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
           }
         } else {
           result0 = null;
@@ -464,10 +543,26 @@ module.exports = (function(){
           }
           if (result1 !== null) {
             result2 = [];
-            result3 = parse_Digit();
+            if (/^[0-9]/.test(input.charAt(pos))) {
+              result3 = input.charAt(pos);
+              pos++;
+            } else {
+              result3 = null;
+              if (reportFailures === 0) {
+                matchFailed("[0-9]");
+              }
+            }
             while (result3 !== null) {
               result2.push(result3);
-              result3 = parse_Digit();
+              if (/^[0-9]/.test(input.charAt(pos))) {
+                result3 = input.charAt(pos);
+                pos++;
+              } else {
+                result3 = null;
+                if (reportFailures === 0) {
+                  matchFailed("[0-9]");
+                }
+              }
             }
             if (result2 !== null) {
               if (/^[fF]/.test(input.charAt(pos))) {
@@ -502,21 +597,6 @@ module.exports = (function(){
         }
         if (result0 === null) {
           pos = pos0;
-        }
-        return result0;
-      }
-      
-      function parse_Digit() {
-        var result0;
-        
-        if (/^[0-9]/.test(input.charAt(pos))) {
-          result0 = input.charAt(pos);
-          pos++;
-        } else {
-          result0 = null;
-          if (reportFailures === 0) {
-            matchFailed("[0-9]");
-          }
         }
         return result0;
       }
